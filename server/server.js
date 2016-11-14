@@ -32,7 +32,6 @@ app.get('/todos/:id', (req,res) => {
   Todo.findById(req.params.id)
     .then((todo) => {
       if (!todo) {
-        console.log(res)
         return res.status(404).send('Record not found')
       }
 
@@ -41,6 +40,19 @@ app.get('/todos/:id', (req,res) => {
   .catch((e) => {
     res.status(404).send(e)
   })
+})
+
+app.delete('/todos/:id', (req,res) => {
+  Todo.findByIdAndRemove(req.params.id)
+    .then((todo) => {
+      if (!todo) {
+        res.status(400).send('Record Not Found')
+      }
+      res.send({todo})
+    })
+    .catch((e) => {
+      res.status(400).send(e)
+    })
 })
 
 app.listen(port, () => {
