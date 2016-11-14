@@ -1,11 +1,13 @@
+require('./config/config')
+
 const express = require('express');
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
-const port = process.env.PORT || 3001
 var { mongoose } = require('./db/mongoose')
 var { Todo } = require('./models/todos')
 var { User } = require('./models/users')
+const _ = require('lodash')
 
 app.use(express.static(path.join(__dirname, '../public')))
 app.use(bodyParser.urlencoded({ extended: true}))
@@ -55,8 +57,32 @@ app.delete('/todos/:id', (req,res) => {
     })
 })
 
-app.listen(port, () => {
-  console.log('Server is running on port', port)
+app.patch('/todos/:id', (req, res) => {
+  var body = _.pick(req.body, ['text', 'completed'])
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(req.params.id, {
+    $set: body
+  }, {
+    new: true
+  }).then((todo) => {
+    res.status(200).send({todo})
+  }).catch((e) => {
+    res.status(404).send(e)
+  })
+
+})
+
+
+
+app.listen(process.env.PORT, () => {
+  console.log('Server is running on port', process.env.PORT)
 })
 
 module.exports = { app }
