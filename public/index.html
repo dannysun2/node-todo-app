@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="chatApp">
   <head>
-    <meta charset="utf-8">
-    <title>Login</title>
+    <title>MEAN App</title>
   </head>
-  <body>
-    <form class="" action="/login" method="post">
-      <input type="text" name="name" value="">
-      <input type="text" name="pwd" value="">
-      <button type="submit">Login</button>
-    </form>
+  <body ng-controller="mainCtrl as main">
+
+    <h1>{{ main.greeting }}</h1>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/controllers/chat.controller.js"></script>
   </body>
 </html>
